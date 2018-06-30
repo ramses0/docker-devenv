@@ -8,6 +8,10 @@ RUN test -n "$localuser"
 ARG vncpassword
 RUN test -n "$vncpassword"
 
+# sudoers, users, and permissions
+RUN echo "ALL            ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN useradd $localuser -m -s /bin/bash
+RUN adduser $localuser sudo
 
 # docker run -v /host/directory:/container/directory -other -options image_name command_to_run
 # COPY ...src... ..dest...
@@ -18,22 +22,13 @@ RUN ulimit -n 2000
 RUN apt-get update
 
 # base linux functionality (mostly never changes!)
-RUN apt-get install -y man apt-utils dialog sudo
-
-# pretend it's a real linux machine functionality (mostly never changes!)
-RUN apt-get install -y man openssh-server netcat-openbsd
-
-# basic development stuff (also mostly never changes!)
-RUN apt-get install -y vim git pass
-
-
-# sudoers, users, and permissions
-RUN echo "ALL            ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers
-RUN useradd $localuser -m -s /bin/bash
-RUN adduser $localuser sudo
+RUN apt-get install -y man apt-utils dialog sudo openssh-server netcat-openbsd
 
 # trying fancy VNC stuff
-RUN apt-get update && apt-get install -y x11vnc xvfb firefox-esr
+RUN apt-get install -y x11vnc xvfb firefox-esr
+
+# basic development stuff (also mostly never changes!)
+RUN apt-get install -y vim git pass jq
 
 # switch to unpriveleged user (with full sudo)
 USER $localuser
