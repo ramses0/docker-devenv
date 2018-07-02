@@ -48,10 +48,11 @@ RUN x11vnc -storepasswd $vncpassword /home/$localuser/.vnc/passwd
 RUN echo '' > ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/script/bootstrap && printf "Robert Ames\\nramses0@yahoo.com\\n" | ~/Git/__dotfiles__/script/bootstrap' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bash/profile && source ~/Git/__dotfiles__/bash/profile' >> ~/.bashrc
+RUN echo 'test -f ~/Git/__dotfiles__/bin/ensure-debian-maintained &&  ~/Git/__dotfiles__/bin/ensure-debian-maintained' >> ~/.bashrc
 EXPOSE 5900
 
 RUN rm -rf ~/Git/__profile__
 RUN mkdir -p ~/Git/__profile__
-RUN echo "git clone 'https://github.com/ramses0/docker-devenv.git' ~/Git/__profile__/" > /home/$localuser/motd
-RUN echo "git clone 'https://github.com/ramses0/dotfiles.git' ~/Git/__dotfiles__/" > /home/$localuser/motd
+RUN echo "git clone 'https://github.com/ramses0/docker-devenv.git' ~/Git/__profile__/" >> /home/$localuser/motd
+RUN echo "git clone 'https://github.com/ramses0/dotfiles.git' ~/Git/__dotfiles__/" >> /home/$localuser/motd
 
