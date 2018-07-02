@@ -5,6 +5,7 @@ LABEL maintainer="Robert Ames (ramses0@yahoo.com)"
 ARG localuser
 RUN test -n "$localuser"
 
+# build requires local password(s)
 ARG vncpassword
 RUN test -n "$vncpassword"
 
@@ -15,10 +16,11 @@ RUN test -n "$vncpassword"
 # (apt-get is slow when ulimit is unlimited or high)
 RUN ulimit -n 2000
 RUN apt-get update
+RUN apt-get install -y sudo
 
 # base linux functionality (mostly never changes!)
 RUN apt-get install -y dialog apt-utils
-RUN apt-get install -y man sudo openssh-server netcat-openbsd curl
+RUN apt-get install -y man openssh-server netcat-openbsd curl
 RUN apt-get install -y ruby perl python gcc make
 
 # trying fancy VNC stuff
@@ -49,10 +51,10 @@ RUN echo '' > ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/script/bootstrap && printf "Robert Ames\\nramses0@yahoo.com\\n" | ~/Git/__dotfiles__/script/bootstrap' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bash/profile && source ~/Git/__dotfiles__/bash/profile' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bin/ensure-debian-maintained &&  ~/Git/__dotfiles__/bin/ensure-debian-maintained' >> ~/.bashrc
+RUN echo 'test -f ~/Git/__dotfiles__/bash/profile || cat ~/motd' >> ~/.bashrc
 EXPOSE 5900
 
 RUN rm -rf ~/Git/__profile__
 RUN mkdir -p ~/Git/__profile__
-RUN echo "git clone 'https://github.com/ramses0/docker-devenv.git' ~/Git/__profile__/" >> /home/$localuser/motd
-RUN echo "git clone 'https://github.com/ramses0/dotfiles.git' ~/Git/__dotfiles__/" >> /home/$localuser/motd
+COPY ./motd /home/$localuser/motd
 
