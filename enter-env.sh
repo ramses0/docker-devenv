@@ -8,4 +8,5 @@ docker \
 	-p 127.0.0.1:1234:5900 \
 	-i \
 	-t \
+	-w /home/$USER/ \
 	rames-devenv:latest bash
