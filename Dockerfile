@@ -21,7 +21,9 @@ RUN apt-get install -y sudo
 # base linux functionality (mostly never changes!)
 RUN apt-get install -y dialog apt-utils
 RUN apt-get install -y man openssh-server netcat-openbsd curl
-RUN apt-get install -y ruby perl python gcc make
+
+# programming languages / build environment
+RUN apt-get install -y ruby perl python golang rustc scala gcc make
 
 # trying fancy VNC stuff
 RUN apt-get install -y x11vnc xvfb firefox-esr
@@ -48,8 +50,8 @@ CMD [ "/bin/bash", "-c", "cd ~" ]
 RUN mkdir -p /home/$localuser/.vnc
 RUN x11vnc -storepasswd $vncpassword /home/$localuser/.vnc/passwd
 RUN echo '' > ~/.bashrc
-RUN echo 'test -f ~/Git/__dotfiles__/script/bootstrap && printf "Robert Ames\\nramses0@yahoo.com\\n" | ~/Git/__dotfiles__/script/bootstrap' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bash/profile && source ~/Git/__dotfiles__/bash/profile' >> ~/.bashrc
+RUN echo 'test -f ~/Git/__dotfiles__/script/bootstrap && printf "Robert Ames\\nramses0@yahoo.com\\n" | ~/Git/__dotfiles__/script/bootstrap' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bin/ensure-debian-maintained &&  ~/Git/__dotfiles__/bin/ensure-debian-maintained' >> ~/.bashrc
 RUN echo 'test -f ~/Git/__dotfiles__/bash/profile || cat ~/motd' >> ~/.bashrc
 EXPOSE 5900
